@@ -8,13 +8,14 @@
   "lang": {
     "en-US": {
       "name": "Slack Message",
-      "description": "Send a message to a Slack channel from Journey Builder"
+      "description": "Send a message to a Slack channel or user from Journey Builder"
     }
   },
   "arguments": {
     "execute": {
       "inArguments": [
         {
+          "recipientType": "channel",
           "channel": "",
           "slackMessage": ""
         }
@@ -29,13 +30,40 @@
   },
   "configurationArguments": {
     "applicationExtensionKey": "slackCustomActivity",
-    "save": { "url": "https://slack-sfmc-activity.onrender.com/save", "verb": "POST", "format": "json", "useJwt": false, "timeout": 2000 },
-    "publish": { "url": "https://slack-sfmc-activity.onrender.com/publish", "verb": "POST", "format": "json", "useJwt": false, "timeout": 2000 },
-    "validate": { "url": "https://slack-sfmc-activity.onrender.com/validate", "verb": "POST", "format": "json", "useJwt": false, "timeout": 2000 },
-    "stop": { "url": "https://slack-sfmc-activity.onrender.com/stop", "verb": "POST", "format": "json", "useJwt": false, "timeout": 2000 }
+    "save": {
+      "url": "https://slack-sfmc-activity.onrender.com/save",
+      "verb": "POST",
+      "format": "json",
+      "useJwt": false,
+      "timeout": 2000
+    },
+    "publish": {
+      "url": "https://slack-sfmc-activity.onrender.com/publish",
+      "verb": "POST",
+      "format": "json",
+      "useJwt": false,
+      "timeout": 2000
+    },
+    "validate": {
+      "url": "https://slack-sfmc-activity.onrender.com/validate",
+      "verb": "POST",
+      "format": "json",
+      "useJwt": false,
+      "timeout": 2000
+    },
+    "stop": {
+      "url": "https://slack-sfmc-activity.onrender.com/stop",
+      "verb": "POST",
+      "format": "json",
+      "useJwt": false,
+      "timeout": 2000
+    }
   },
   "wizardSteps": [
-    { "label": "Configure Slack Message", "key": "step1" }
+    {
+      "label": "Configure Slack Message",
+      "key": "step1"
+    }
   ],
   "userInterfaces": {
     "configModal": {
@@ -48,6 +76,13 @@
     "arguments": {
       "execute": {
         "inArguments": [
+          {
+            "recipientType": {
+              "dataType": "String",
+              "isNullable": false,
+              "direction": "in"
+            }
+          },
           {
             "channel": {
               "dataType": "String",

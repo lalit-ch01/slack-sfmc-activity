@@ -11,30 +11,6 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// Route: fetch Slack channels
-app.get('/channels', async (req, res) => {
-  try {
-    const response = await axios.get('https://slack.com/api/conversations.list', {
-      headers: {
-        "Authorization": `Bearer ${process.env.SLACK_BOT_TOKEN}`
-      }
-    });
-
-    if (response.data.ok) {
-      const channels = response.data.channels.map(ch => ({
-        id: ch.id,
-        name: ch.name
-      }));
-      res.json(channels);
-    } else {
-      res.status(500).json({ error: response.data.error });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error fetching channels');
-  }
-});
-
 // Route: execute Slack message
 app.post('/execute', async (req, res) => {
   try {

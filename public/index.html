@@ -6,18 +6,49 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/postmonger.js"></script>
   <script src="js/customActivity.js"></script>
+  <style>
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 300px;
+      padding: 5px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
   <h2>Configure Slack Message</h2>
 
-  <label>Slack Channel:</label>
-  <select id="channelDropdown">
-    <option value="">Loading channels...</option>
-  </select><br><br>
+  <label>Send To:</label>
+  <select id="recipientTypeSelect">
+    <option value="channel" selected>Slack Channel</option>
+    <option value="user">Slack User</option>
+  </select>
+
+  <label id="idLabel" for="idInput">Slack Channel ID:</label>
+  <input type="text" id="idInput" placeholder="e.g. C01ABC123 or U01DEF456" />
 
   <label>Message:</label>
-  <input type="text" id="messageInput" placeholder="Hello from SFMC!" /><br><br>
+  <input type="text" id="messageInput" placeholder="Hello from SFMC!" />
 
+  <br><br>
   <button id="saveBtn">Save</button>
+
+  <script>
+    $(document).ready(function () {
+      $('#recipientTypeSelect').on('change', function () {
+        const val = $(this).val();
+        if (val === 'channel') {
+          $('#idLabel').text('Slack Channel ID:');
+          $('#idInput').attr('placeholder', 'e.g. C01ABC123');
+        } else {
+          $('#idLabel').text('Slack User ID:');
+          $('#idInput').attr('placeholder', 'e.g. U01DEF456');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

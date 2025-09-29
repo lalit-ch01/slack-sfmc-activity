@@ -1,64 +1,74 @@
 define(['jquery', 'postmonger'], function($, Postmonger) {
-    'use strict';
+  'use strict';
 
-    var connection = new Postmonger.Session();
-    var payload = {};
+  var connection = new Postmonger.Session();
+  var payload = {};
 
-    $(window).ready(onRender);
+  $(window).ready(onRender);
 
-    connection.on('initActivity', initialize);
-    connection.on('clickedNext', save);
+  connection.on('initActivity', initialize);
+  connection.on('clickedNext', save);
 
-    // Called when Journey Builder opens the activity
-    function onRender() {
-        connection.trigger('ready');
-        $('#saveBtn').click(save);
+  function onRender() {
+    connection.trigger('ready');
+    $('#saveBtn').click(save);
 
-        // Fetch Slack channels from backend
-        $.get('/channels', function(channels) {
-            var $dropdown = $('#channelDropdown');
-            $dropdown.empty();
-            if(channels.length === 0) {
-                $dropdown.append('<option value="">No channels found</option>');
-            } else {
-                $dropdown.append('<option value="">--Select Channel--</option>');
-                channels.forEach(function(ch) {
-                    $dropdown.append(`<option value="${ch.id}">${ch.name}</option>`);
-                });
-            }
-        }).fail(function() {
-            alert('Failed to fetch Slack channels. Check server.');
-        });
+    // No channel dropdown fetch needed anymore
+  }
+
+  function initialize(data) {
+    if (data) {
+      payload = data;
     }
 
-    // Initialize with existing data
-    function initialize(data) {
-        if (data) {
-            payload = data;
-        }
-        var inArgs = payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments || [];
-        if (inArgs.length > 0) {
-            $('#channelDropdown').val(inArgs[0].channel);
-            $('#messageInput').val(inArgs[0].slackMessage);
-        }
+    var inArgs = payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments || [];
+    if (inArgs.length > 0) {
+      var arg = inArgs[0];
+      // Determine recipient type by presence of channel or userId
+      if (arg.channel && arg.channel.startsWith('C')) {
+        $('#recipientTypeSelect').val('channel');
+        $('#idLabel').text('Slack Channel ID:');
+        $('#idInput').val(arg.channel);
+        $('#idInput').attr('placeholder', 'e.g. C01ABC123');
+      } else if (arg.channel && arg.channel.startsWith('U')) {
+        // Assuming user IDs start with U
+        $('#recipientTypeSelect').val('user');
+        $('#idLabel').text('Slack User ID:');
+        $('#idInput').val(arg.channel);
+        $('#idInput').attr('placeholder', 'e.g. U01DEF456');
+      } else {
+        // Default fallback
+        $('#recipientTypeSelect').val('channel');
+        $('#idLabel').text('Slack Channel ID:');
+        $('#idInput').val('');
+        $('#idInput').attr('placeholder', 'e.g. C01ABC123');
+      }
+
+      $('#messageInput').val(arg.slackMessage || '');
+    }
+  }
+
+  function save() {
+    var recipientType = $('#recipientTypeSelect').val();
+    var idValue = $('#idInput').val().trim();
+    var message = $('#messageInput').val().trim();
+
+    if (!idValue) {
+      alert(`Please enter a Slack ${recipientType === 'channel' ? 'channel' : 'user'} ID.`);
+      return;
+    }
+    if (!message) {
+      alert('Please enter a message.');
+      return;
     }
 
-    // Save data and send to Journey Builder
-    function save() {
-        var selectedChannel = $('#channelDropdown').val();
-        var message = $('#messageInput').val();
+    // Set the channel/user ID in the "channel" argument for backward compatibility
+    payload.arguments.execute.inArguments = [{
+      channel: idValue,
+      slackMessage: message
+    }];
 
-        if (!selectedChannel || !message) {
-            alert('Please select a Slack channel and enter a message.');
-            return;
-        }
-
-        payload.arguments.execute.inArguments = [{
-            "channel": selectedChannel,
-            "slackMessage": message
-        }];
-
-        payload.metaData.isConfigured = true;
-        connection.trigger('updateActivity', payload);
-    }
+    payload.metaData.isConfigured = true;
+    connection.trigger('updateActivity', payload);
+  }
 });
