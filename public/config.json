@@ -1,0 +1,70 @@
+{
+  "workflowApiVersion": "1.1",
+  "metaData": {
+    "icon": "images/slack.png",
+    "category": "message"
+  },
+  "type": "REST",
+  "lang": {
+    "en-US": {
+      "name": "Slack Message",
+      "description": "Send a message to a Slack channel from Journey Builder"
+    }
+  },
+  "arguments": {
+    "execute": {
+      "inArguments": [
+        {
+          "channel": "",
+          "slackMessage": ""
+        }
+      ],
+      "outArguments": [],
+      "url": "http://localhost:3000/execute",
+      "verb": "POST",
+      "format": "json",
+      "useJwt": false,
+      "timeout": 2000
+    }
+  },
+  "configurationArguments": {
+    "applicationExtensionKey": "slackCustomActivity",
+    "save": { "url": "http://localhost:3000/save", "verb": "POST", "format": "json", "useJwt": false, "timeout": 2000 },
+    "publish": { "url": "http://localhost:3000/publish", "verb": "POST", "format": "json", "useJwt": false, "timeout": 2000 },
+    "validate": { "url": "http://localhost:3000/validate", "verb": "POST", "format": "json", "useJwt": false, "timeout": 2000 },
+    "stop": { "url": "http://localhost:3000/stop", "verb": "POST", "format": "json", "useJwt": false, "timeout": 2000 }
+  },
+  "wizardSteps": [
+    { "label": "Configure Slack Message", "key": "step1" }
+  ],
+  "userInterfaces": {
+    "configModal": {
+      "height": 400,
+      "width": 600,
+      "url": "http://localhost:3000/index.html"
+    }
+  },
+  "schema": {
+    "arguments": {
+      "execute": {
+        "inArguments": [
+          {
+            "channel": {
+              "dataType": "String",
+              "isNullable": false,
+              "direction": "in"
+            }
+          },
+          {
+            "slackMessage": {
+              "dataType": "String",
+              "isNullable": false,
+              "direction": "in"
+            }
+          }
+        ],
+        "outArguments": []
+      }
+    }
+  }
+}
