@@ -18,6 +18,8 @@ app.post('/execute', async (req, res) => {
     const channel = inArgs.channel;
     const message = inArgs.slackMessage;
 
+    console.log('Sending to channel:', channel, 'message:', message);
+
     await axios.post('https://slack.com/api/chat.postMessage', {
       channel: channel,
       text: message
@@ -30,7 +32,7 @@ app.post('/execute', async (req, res) => {
 
     res.status(200).send('Message sent to Slack');
   } catch (err) {
-    console.error(err);
+    console.error('Slack API error:', err.response ? err.response.data : err.message);
     res.status(500).send('Error sending Slack message');
   }
 });
