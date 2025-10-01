@@ -5,6 +5,22 @@
   <script src="js/require.js"></script>
   <script src="js/jquery.min.js"></script>
   <script src="js/postmonger.js"></script>
+  <script>
+  require.config({
+    paths: {
+      jquery: 'js/jquery.min',
+      postmonger: 'js/postmonger'
+    },
+    shim: {
+      jquery: {
+        exports: '$'
+      },
+      postmonger: {
+        exports: 'Postmonger'
+      }
+    }
+  });
+  </script>
   <script src="js/customActivity.js"></script>
   <style>
     label {
@@ -37,6 +53,7 @@
   <button id="saveBtn">Save</button>
 
   <script>
+  require(['jquery'], function($) {
     $(document).ready(function () {
       $('#recipientTypeSelect').on('change', function () {
         const val = $(this).val();
@@ -49,6 +66,7 @@
         }
       });
     });
+  });
   </script>
 </body>
 </html>
