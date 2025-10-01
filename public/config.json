@@ -29,7 +29,7 @@
     }
   },
   "configurationArguments": {
-    "applicationExtensionKey": "slackCustomActivity",
+    "applicationExtensionKey": "a2b851c4-834b-43c9-99cd-2af2f60f0985",
     "save": {
       "url": "https://slack-sfmc-activity.onrender.com/save",
       "verb": "POST",
