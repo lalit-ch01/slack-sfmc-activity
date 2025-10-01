@@ -28,20 +28,20 @@ function initialize(data) {
   }
 }
 
-function save() {
-  var message = $('#messageInput').val().trim();
+  function save() {
+    var message = $('#messageInput').val().trim();
 
-  if (!message) {
-    alert('Please enter a message.');
-    return;
+    if (!message) {
+      alert('Please enter a message.');
+      return;
+    }
+
+    // Update only slackMessage in inArguments, keep channel from DE
+    if (!payload.arguments.execute.inArguments) {
+      payload.arguments.execute.inArguments = [{}];
+    }
+    payload.arguments.execute.inArguments[0].slackMessage = message;
+
+    payload.metaData.isConfigured = true;
+    connection.trigger('updateActivity', payload);
   }
-
-  // Update only slackMessage in inArguments, keep channel from DE
-  var inArgs = payload.arguments.execute.inArguments || [{}];
-  inArgs[0].slackMessage = message;
-
-  payload.arguments.execute.inArguments = inArgs;
-
-  payload.metaData.isConfigured = true;
-  connection.trigger('updateActivity', payload);
-}
