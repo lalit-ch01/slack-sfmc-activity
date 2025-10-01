@@ -4,7 +4,7 @@
     "icon": "images/slack.png",
     "category": "message"
   },
-  "type": "REST",
+  "type": "MESSAGE",
   "lang": {
     "en-US": {
       "name": "Slack Message",
