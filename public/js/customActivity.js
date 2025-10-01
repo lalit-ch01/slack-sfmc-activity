@@ -23,49 +23,24 @@ function initialize(data) {
   var inArgs = payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments || [];
   if (inArgs.length > 0) {
     var arg = inArgs[0];
-    // Determine recipient type by presence of channel or userId
-    if (arg.channel && arg.channel.startsWith('C')) {
-      $('#recipientTypeSelect').val('channel');
-      $('#idLabel').text('Slack Channel ID:');
-      $('#idInput').val(arg.channel);
-      $('#idInput').attr('placeholder', 'e.g. C01ABC123');
-    } else if (arg.channel && arg.channel.startsWith('U')) {
-      // Assuming user IDs start with U
-      $('#recipientTypeSelect').val('user');
-      $('#idLabel').text('Slack User ID:');
-      $('#idInput').val(arg.channel);
-      $('#idInput').attr('placeholder', 'e.g. U01DEF456');
-    } else {
-      // Default fallback
-      $('#recipientTypeSelect').val('channel');
-      $('#idLabel').text('Slack Channel ID:');
-      $('#idInput').val('');
-      $('#idInput').attr('placeholder', 'e.g. C01ABC123');
-    }
-
+    // Only populate message input, no channel or recipient type UI
     $('#messageInput').val(arg.slackMessage || '');
   }
 }
 
 function save() {
-  var recipientType = $('#recipientTypeSelect').val();
-  var idValue = $('#idInput').val().trim();
   var message = $('#messageInput').val().trim();
 
-  if (!idValue) {
-    alert(`Please enter a Slack ${recipientType === 'channel' ? 'channel' : 'user'} ID.`);
-    return;
-  }
   if (!message) {
     alert('Please enter a message.');
     return;
   }
 
-  // Set the channel/user ID in the "channel" argument for backward compatibility
-  payload.arguments.execute.inArguments = [{
-    channel: idValue,
-    slackMessage: message
-  }];
+  // Update only slackMessage in inArguments, keep channel from DE
+  var inArgs = payload.arguments.execute.inArguments || [{}];
+  inArgs[0].slackMessage = message;
+
+  payload.arguments.execute.inArguments = inArgs;
 
   payload.metaData.isConfigured = true;
   connection.trigger('updateActivity', payload);
