@@ -17,7 +17,7 @@
         {
           "recipientType": "channel",
           "channel": "{{Contact.Attribute.JourneyEntrySource.channelId}}",
-          "slackMessage": ""
+          "slackMessage": "hey this from sfmc journey builder"
         }
       ],
       "outArguments": [],
