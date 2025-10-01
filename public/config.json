@@ -16,7 +16,7 @@
       "inArguments": [
         {
           "recipientType": "channel",
-          "channel": "{{Contact.Attribute.JourneyEntrySource.ChannelID}}",
+          "channel": "{{Contact.Attribute.JourneyEntrySource.channelID}}",
           "slackMessage": ""
         }
       ],
