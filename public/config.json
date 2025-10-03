@@ -16,7 +16,7 @@
       "inArguments": [
         {
           "recipientType": "channel",
-          "channel": "{{Contact.Attribute.TEST_DE.channelId}}",
+          "channel": "C09H77827B9",
           "slackMessage": "hey this from sfmc journey builder"
         }
       ],
