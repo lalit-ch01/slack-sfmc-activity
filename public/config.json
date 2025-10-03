@@ -15,9 +15,9 @@
     "execute": {
       "inArguments": [
         {
-          "recipientType": "channel",
-          "channel": "C09H77827B9",
-          "slackMessage": "hey this from sfmc journey builder"
+          "recipientType": "",
+          "channel": "",
+          "slackMessage": ""
         }
       ],
       "outArguments": [],
